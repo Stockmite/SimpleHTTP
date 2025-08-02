@@ -2,6 +2,9 @@
 #include <Windows.h>
 #include <ws2def.h>
 
+#define Buffer_lenght 256
+#define queue_len 5
+
 int main() {
 
     WSADATA wsadata;
@@ -16,8 +19,11 @@ int main() {
 
     bind(ServerSocket, &addr, sizeof(addr));
 
-    listen(ServerSocket, 5);
+    listen(ServerSocket, queue_len);
 
     SOCKET ClientSocket = accept(ServerSocket, 0, 0);
+
+    char req_buffer[Buffer_lenght] = {0};
+    recv(ClientSocket, req_buffer, Buffer_lenght, 0);
 
 }
