@@ -18,7 +18,7 @@ int main() {
     addr.sin_addr.s_addr = 0;
     addr.sin_port = htons(8080);
 
-    bind(ServerSocket, &addr, sizeof(addr));
+    bind(ServerSocket, (SOCKADDR*)&addr, sizeof(addr));
 
     listen(ServerSocket, queue_len);
 
