@@ -1,6 +1,7 @@
 #include <winsock2.h>
 #include <Windows.h>
 #include <ws2def.h>
+#include <Winerror.h>
 #include <stdio.h>
 
 #define Buffer_lenght 256
@@ -31,9 +32,16 @@ int main() {
 
         FILE* file = fopen("index.html", "r");
 
-        char fBuffer[Buffer_lenght] = {0};
-        fread(fBuffer, 1, Buffer_lenght, file);
-        send(ClientSocket, fBuffer, Buffer_lenght, 0);
+        char fBuffer[Buffer_lenght * 10] = {0};
+        fread(fBuffer, 1, Buffer_lenght * 10, file);
+
+        int result = send(ClientSocket, fBuffer, Buffer_lenght * 10, 0);
+
+        if (result == SOCKET_ERROR) {
+
+            int cause = WSAGetLastError();
+            printf("%d\n", cause);
+        }
 
     }
 
