@@ -40,7 +40,7 @@ int main() {
         if (result == SOCKET_ERROR) {
 
             int cause = WSAGetLastError();
-            printf("%d\n", cause);
+
         }
 
     }
