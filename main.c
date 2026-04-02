@@ -1,8 +1,9 @@
 #include <winsock2.h>
-#include <Windows.h>
+#include <windows.h>
 #include <ws2def.h>
 #include <Winerror.h>
 #include <stdio.h>
+#include <stdbool.h>
 
 #define Buffer_lenght 256
 #define queue_len 5
@@ -21,29 +22,32 @@ int main() {
 
     bind(ServerSocket, (SOCKADDR*)&addr, sizeof(addr));
 
-    listen(ServerSocket, queue_len);
+    while (true) {
+        listen(ServerSocket, queue_len);
 
-    SOCKET ClientSocket = accept(ServerSocket, 0, 0);
+        SOCKET ClientSocket = accept(ServerSocket, 0, 0);
 
-    char req_buffer[Buffer_lenght] = {0};
-    recv(ClientSocket, req_buffer, Buffer_lenght, 0);
+        char req_buffer[Buffer_lenght] = {0};
+        recv(ClientSocket, req_buffer, Buffer_lenght, 0);
 
-    if (memcmp(req_buffer, "GET / ", 6) == 0) {
+        if (memcmp(req_buffer, "GET / ", 6) == 0) {
 
-        FILE* file = fopen("index.html", "r");
+            FILE* file = fopen("index.html", "r");
 
-        char fBuffer[Buffer_lenght * 10] = {0};
-        fread(fBuffer, 1, Buffer_lenght * 10, file);
+            char fBuffer[Buffer_lenght * 10] = {0};
+            fread(fBuffer, 1, Buffer_lenght * 10, file);
 
-        int result = send(ClientSocket, fBuffer, Buffer_lenght * 10, 0);
+            int result = send(ClientSocket, fBuffer, Buffer_lenght * 10, 0);
 
-        if (result == SOCKET_ERROR) {
+            if (result == SOCKET_ERROR) {
 
-            int cause = WSAGetLastError();
+                int cause = WSAGetLastError();
+
+            }
 
         }
-
     }
+
 
     //IT WOOORKKEEEEDDD
 
